@@ -73,18 +73,16 @@ const Homepage = ({ token }: { token: Token }) => {
                 }),
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to update TODO status: ${response.status} ${response.statusText}\n${errorText}`);
-            }
-
+            if (response.ok) {
             setTodos((prevTodos) =>
                 prevTodos.map((todo) =>
                     todo.id === id
-                        ? { ...todo, status: newStatus, title: todo.title, description: todo.description }
+                        ? { ...todo, status: newStatus, title, description }
                         : todo
                 )
             );
+        }
+
 
             console.log('Todos after status update:', todos); // Check if todos contain title and description
         } catch (error) {
@@ -113,17 +111,17 @@ const Homepage = ({ token }: { token: Token }) => {
                 }),
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Failed to add TODO: ${response.status} ${response.statusText}\n${errorText}`);
-                throw new Error(`Failed to add TODO: ${response.status} ${response.statusText}\n${errorText}`);
+            if (response.ok) {
+                setNewTodo({
+                    title: '',
+                    description: '',
+                    status: TodoStatus.Pending,
+                });
+    
+                const updatedTodos: Todo[] = await response.json();
+                setTodos(updatedTodos); // Update the state with the new todos
             }
-
-            setNewTodo({
-                title: '',
-                description: '',
-                status: TodoStatus.Pending,
-            });
+    
 
             fetchTodos(); // Fetch updated todos after adding a new one
         } catch (error) {
@@ -149,6 +147,7 @@ const Homepage = ({ token }: { token: Token }) => {
                 throw new Error(`Failed to delete TODO: ${response.status} ${response.statusText}\n${errorText}`);
             }
 
+        
             setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
         } catch (error) {
             console.error('Error deleting TODO:', error);
@@ -160,9 +159,6 @@ const Homepage = ({ token }: { token: Token }) => {
         navigate('/');
     }
 
-    const [forceRender, setForceRender] = useState(false);
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
 
     const handleTodoUpdate = async (id: number, newStatus: TodoStatus, newTitle: string, newDescription: string) => {
         try {
@@ -183,16 +179,16 @@ const Homepage = ({ token }: { token: Token }) => {
             console.log('New Status:', newStatus);
             console.log('Update response:', response);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Failed to update TODO: ${response.status} ${response.statusText}\n${errorText}`);
-            } else {
-                // Successfully updated
-                console.log('TODO updated successfully');
-                setForceRender((prev) => !prev);
-                setTitle(newTitle);
-                setDescription(newDescription);
+            if (response.ok) {
+                setTodos((prevTodos) =>
+                    prevTodos.map((todo) =>
+                        todo.id === id
+                            ? { ...todo, status: newStatus, title: newTitle, description: newDescription }
+                            : todo
+                    )
+                );
             }
+    
 
             // ... rest of the code
         } catch (error) {
