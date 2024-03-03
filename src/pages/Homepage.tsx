@@ -111,16 +111,17 @@ const Homepage = ({ token }: { token: Token }) => {
                 }),
             });
 
-            if (response.ok) {
-                setNewTodo({
-                    title: '',
-                    description: '',
-                    status: TodoStatus.Pending,
-                });
-    
-                const updatedTodos: Todo[] = await response.json();
-                setTodos(updatedTodos); // Update the state with the new todos
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Failed to add TODO: ${response.status} ${response.statusText}\n${errorText}`);
+                throw new Error(`Failed to add TODO: ${response.status} ${response.statusText}\n${errorText}`);
             }
+
+            setNewTodo({
+                title: '',
+                description: '',
+                status: TodoStatus.Pending,
+            });
     
 
             fetchTodos(); // Fetch updated todos after adding a new one
@@ -262,7 +263,7 @@ const Homepage = ({ token }: { token: Token }) => {
                     </form>
                 </div>
                 <div className='flex gap-20' id='pendingContainer'>
-                    <div className='border bg-pink-700 rounded-lg p-10 w-1/3'>
+                    <div className='border bg-orange-200 rounded-lg p-10 w-1/3 hover:shadow-xl hover:shadow-slate-600'>
                         <h2 className='text-center font-bold underline'>Pending</h2>
                         <br />
                         <div id='pendingList'>{renderTodoList(TodoStatus.Pending)}</div>
@@ -270,7 +271,7 @@ const Homepage = ({ token }: { token: Token }) => {
                     </div>
 
 
-                    <div className='border bg-fuchsia-700 rounded-lg p-10 w-1/3 ' id='inProgressContainer'>
+                    <div className='border bg-orange-200 rounded-lg p-10 w-1/3 hover:shadow-xl hover:shadow-slate-600' id='inProgressContainer'>
                         <h2 className='text-center font-bold underline'>In Progress</h2>
 
                         <div id='In Progress'>
@@ -279,7 +280,7 @@ const Homepage = ({ token }: { token: Token }) => {
 
                     </div>
 
-                    <div className='border bg-purple-300 rounded-lg p-10 w-1/3' id='doneContainer'>
+                    <div className='border bg-orange-200 rounded-lg p-10 w-1/3 hover:shadow-xl hover:shadow-slate-600' id='doneContainer'>
                         <h2 className='text-center font-bold underline'>Done</h2>
                         <div id='doneList'>
                             {renderTodoList(TodoStatus.Done)}
