@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 export default function BlogContentPage() {
   const params = useParams();
   const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchBlogById(slug: string) {
@@ -18,28 +17,29 @@ export default function BlogContentPage() {
       const data = await res.json();
       console.log('API Response:', data);
       setData(data);
-      setLoading(false); // Set loading to false once data is fetched
+       // Set loading to false once data is fetched
     }
 
     if (params.slug) {
       console.log('Fetching data for slug:', params.slug);
       fetchBlogById(params.slug as string);
     }
+   
   }, [params.slug]);
+  
+
+
 
   console.log('Render Data:', data);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
+  
   if (!data?.meals || data.meals.length === 0) {
     return <p>Error: Meal not found</p>;
   }
 
   return (
     <>
-      <div className="w-11/12 text-sm font-normal space-y-3">
+      <div className="w-11/12 pt-10 text-sm font-normal space-y-3">
         {data.meals.map((meal: any) => (
           <div key={meal.idMeal} className='border  m-10 p-10 flex justify-between gap-5'>
             <Image

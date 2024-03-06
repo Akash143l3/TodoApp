@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ModeToggle } from "./ModeToggle";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -52,6 +53,18 @@ export default function Navbar() {
             Dashboard
           </span>
         </Link>
+        <Link href={"/todo"}>
+          <span
+            className={
+              pathname === "/todo"
+                ? "underline underline-offset-4"
+                : "no-underline"
+            }
+          >
+            Todo
+          </span>
+        </Link>
+        <div><ModeToggle /></div>
       </div>
       </div>
     </nav>
