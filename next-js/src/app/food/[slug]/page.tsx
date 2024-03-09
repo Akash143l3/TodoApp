@@ -1,42 +1,20 @@
-"use client";
-import { CaseLower, CaseUpper } from 'lucide-react';
+
+
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-export default function BlogContentPage() {
-  const params = useParams();
-  const [data, setData] = useState<any>();
-
-  useEffect(() => {
-    async function fetchBlogById(slug: string) {
-      const res = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/search.php?f=${slug}`,
-        { method: 'GET' }
-      );
-      const data = await res.json();
-      console.log('API Response:', data);
-      setData(data);
-       // Set loading to false once data is fetched
-    }
-
-    if (params.slug) {
-      console.log('Fetching data for slug:', params.slug);
-      fetchBlogById(params.slug as string);
-    }
-   
-  }, [params.slug]);
-  
 
 
+async function fetchBlogById(slug: string) {
+  const res = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/search.php?f=${slug}`,
+    { method: 'GET' }
+  );
+  const data = await res.json();
+  console.log('API Response:', data);
+  return data;
+}
 
-  console.log('Render Data:', data);
-
-  
-  if (!data?.meals || data.meals.length === 0) {
-    return <p>Error: Meal not found</p>;
-  }
-
+export default async  function BlogContentPage({params}:{params:{slug:string} }) {
+ const data = await fetchBlogById(params.slug)
   return (
     <>
       <div className="w-11/12 pt-10 text-sm font-normal space-y-3">

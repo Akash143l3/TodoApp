@@ -53,15 +53,15 @@ export default function Navbar() {
             Dashboard
           </span>
         </Link>
-        <Link href={"/todo"}>
+        <Link href={"/emoji"}>
           <span
             className={
-              pathname === "/todo"
+              pathname === "/emoji"
                 ? "underline underline-offset-4"
                 : "no-underline"
             }
           >
-            Todo
+            Emoji
           </span>
         </Link>
         <div><ModeToggle /></div>

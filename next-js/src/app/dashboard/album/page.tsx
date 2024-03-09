@@ -1,10 +1,10 @@
-import ImageUpload from "@/components/ImageUpload";
+
 
 export default function Album() {
   return (
     <div>
-    <h1>Image Upload</h1>
-    <ImageUpload />
+    <h1>Album</h1>
+   
   </div>
 );
 };

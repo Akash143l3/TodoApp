@@ -5,8 +5,8 @@ export default function Sidebar() {
  
     return (
         <>
-    <div className='h-fit w-16 border-r  flex '>
-        <div className='flex flex-col fixed gap-10 pt-5'>
+    <div className='h-fit w-16 border-r '>
+        <div className='flex flex-col fixed gap-10 pt-5 w-16 bg-white h-full'>
 
     <div className="relative inline-block group ml-4"><Link href={"/dashboard/album"}>
         <div className="text-2xl cursor-pointer"><Album /></div></Link>
